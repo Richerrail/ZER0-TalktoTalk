@@ -252,6 +252,7 @@ footer{
     <div class="status">
       <div class="dot" id="dot"></div>
       <span id="statut">DECONNECTE</span>
+      <button onclick="document.getElementById('popupOverlay').classList.add('open')" style="margin-left:auto;font-family:'Press Start 2P',cursive;font-size:10px;padding:6px 10px;background:var(--magenta);color:#fff;border:2px solid var(--cyan);cursor:pointer;">MENU ⚡</button>
     </div>
   </header>
 
@@ -284,6 +285,7 @@ footer{
 </div>
 
 <!-- Popup mobile -->
+<button onclick="document.getElementById('popupOverlay').classList.add('open')" style="position:fixed;bottom:70px;right:10px;z-index:150;font-family:'Press Start 2P',cursive;font-size:11px;padding:10px 14px;background:var(--magenta);color:#fff;border:2px solid var(--cyan);box-shadow:0 0 14px var(--magenta);cursor:pointer;border-radius:8px;">MENU ⚡</button>
 <div id="popupOverlay" class="popup-overlay" onclick="if(event.target===this) this.classList.remove('open')">
   <div class="popup-box" onclick="event.stopPropagation()">
     <h2>CONFIGURATION</h2>
