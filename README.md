@@ -4,7 +4,7 @@ Application web rétro 80's pour discuter uniquement avec le provider **OpenRout
 
 ## Screenshot
 
-![Aperçu](ZER0-TalktoTalk/blob/main/asset/screenshot.png)
+![Aperçu](https://github.com/Richerrail/ZER0-TalktoTalk/blob/main/asset/screenshot.png)
 
 ## Fonctionnalités
 
