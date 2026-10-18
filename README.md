@@ -20,11 +20,6 @@ Application web rétro 80's pour discuter uniquement avec le provider **OpenRout
 ## Liens
 
 - Démo Render : https://zer0-talktotalk.onrender.com
-- Dépôt GitHub : https://github.com/Richerrail/ZER0-TalktoTalk
-
-## Déploiement
-
-Voir `README.md` du dépôt GitHub : https://github.com/Richerrail/ZER0-TalktoTalk
 
 ## Utilisation
 
