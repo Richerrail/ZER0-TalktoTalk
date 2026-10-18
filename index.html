@@ -350,8 +350,10 @@ function setConnected(on){
   el.statut.style.color = on ? 'var(--lime)' : 'var(--red)';
 }
 function showErr(msg){
-  console.error('ZER0 ERR:', msg);
-  el.err.textContent = msg;
+  console.error('ZER0 ERR:', msg || '(vide)');
+  el.err.textContent = msg || '';
+  el.err.style.display = msg ? 'block' : 'none';
+}
   el.err.style.display = msg ? 'block' : 'none';
 }
 function setLoading(loading){
@@ -460,8 +462,8 @@ el.btnConnect.onclick = () => {
   if(!apiKey){ showErr('Saisissez une cle API'); return; }
   saveKey(); loadModels();
 };
-el.btnRefresh.onclick = loadModels;
-el.btnApi.onclick = () => { el.apiKey.type = el.apiKey.type === 'password' ? 'text' : 'password'; };
+if(el.btnRefresh) el.btnRefresh.onclick = loadModels;
+if(el.btnApi) el.btnApi.onclick = () => { el.apiKey.type = el.apiKey.type === 'password' ? 'text' : 'password'; };
 el.send.onclick = send;
 el.input.addEventListener('keydown', e => { if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); send(); } });
 
