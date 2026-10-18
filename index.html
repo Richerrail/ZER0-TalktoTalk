@@ -241,13 +241,6 @@ footer{
   .bubble{ font-size:16px; padding:10px 14px; }
   #input{ font-size:16px; padding:10px 14px; min-height:44px; }
   #send{ font-size:12px; padding:10px 16px; }
-  /* Menu mobile bouton flottant */
-  .mobile-menu-btn{
-    position:fixed; bottom:70px; right:10px; z-index:150;
-    font-family:'Press Start 2P', cursive; font-size:10px;
-    padding:10px 14px; background:var(--magenta); color:#fff; border:2px solid var(--cyan);
-    box-shadow:0 0 14px var(--magenta); cursor:pointer; border-radius:8px;
-  }
 }
 </style>
 </head>
@@ -255,15 +248,10 @@ footer{
 <div class="app">
   <header>
     <pre class="ascii">ZER0|TalktoTalk</pre>
-    <div class="subtitle">openrouter :: modeles gratuits uniquement :: retro 80'</div>
+    <div class="subtitle">openrouter :: free :: retro 80'</div>
     <div class="status">
       <div class="dot" id="dot"></div>
       <span id="statut">DECONNECTE</span>
-      <div class="keybad">
-        <button id="btnApi" class="btn secondary">CLE API</button>
-        <button id="btnRefresh" class="btn">MAJ LISTE</button>
-        <button id="btnPopup" class="btn secondary" onclick="document.getElementById('popupOverlay').classList.add('open')">MENU</button>
-      </div>
     </div>
   </header>
 
@@ -317,7 +305,6 @@ footer{
 </div>
 
 <!-- Bouton flottant mobile -->
-<button class="mobile-menu-btn" onclick="document.getElementById('popupOverlay').classList.add('open')">MENU ⚡</button>
 
 <script>
 const API_BASE = 'https://openrouter.ai/api/v1';
