@@ -94,6 +94,11 @@ header{
   background:var(--bg); border:2px solid var(--cyan); color:var(--cyan); cursor:pointer;
 }
 .keybad button:hover{ background:var(--cyan); color:#000; }
+#lemmings{
+  image-rendering:pixelated;
+  align-self:center;
+  display:none;
+}
 /* ===== SIDEBAR ===== */
 aside{
   background:var(--panel);
@@ -225,15 +230,16 @@ footer{
 }
 .popup-box .apikey{ margin-bottom:8px; }
 .popup-box button{ width:100%; margin-top:6px; }
-/* Masquer bouton flottant sur desktop */
-@media (min-width: 951px) { button[onclick*="popupOverlay"] { display:none; } }
-/* ===== MOBILE ===== */
+/* Bouton flottant mobile : cache sur desktop */
+body > button[onclick*="popupOverlay"]{ display:none; }
 @media (max-width: 950px) {
+  body > button[onclick*="popupOverlay"]{ display:block; }
   .app{ grid-template-columns:1fr; grid-template-rows:auto 1fr auto; gap:6px; padding:4px; height:auto; min-height:100vh; }
   header{ padding:10px 10px; gap:6px; }
   header .ascii{ font-size:13px; line-height:1.05; white-space:pre-wrap; overflow-wrap:anywhere; word-break:break-word; }
   .subtitle{ font-size:9px; }
   .status{ font-size:13px; gap:8px; }
+  #lemmings{ display:none !important; }
   .keybad button{ font-size:10px; padding:4px 8px; }
   aside{ display:none; }
   main{ grid-column:1; }
@@ -254,6 +260,7 @@ footer{
     <div class="status">
       <div class="dot" id="dot"></div>
       <span id="statut">DECONNECTE</span>
+      <canvas id="lemmings" width="190" height="34" title="lemmings en approche..."></canvas>
       <button onclick="document.getElementById('popupOverlay').classList.add('open')" style="margin-left:auto;font-family:'Press Start 2P',cursive;font-size:10px;padding:6px 10px;background:var(--magenta);color:#fff;border:2px solid var(--cyan);cursor:pointer;">MENU ⚡</button>
     </div>
   </header>
@@ -310,16 +317,6 @@ footer{
 
 <!-- Bouton flottant mobile -->
 
-
-// Pré-remplir popup depuis localStorage
-window.addEventListener('DOMContentLoaded', () => {
-  const savedKey = localStorage.getItem('zer0_api_key') || '';
-  const savedSys = localStorage.getItem('zer0_system_prompt') || '';
-  const popupKey = document.getElementById('popupApiKey');
-  const popupSys = document.getElementById('popupSystem');
-  if(popupKey) popupKey.value = savedKey;
-  if(popupSys) popupSys.value = savedSys;
-});
 <script>
 const API_BASE = 'https://openrouter.ai/api/v1';
 
@@ -348,6 +345,8 @@ let systemPrompt = localStorage.getItem('zer0_system_prompt') || 'Tu es ZER0, un
 
 el.apiKey.value = apiKey;
 el.systemPrompt.value = systemPrompt;
+document.getElementById('popupApiKey').value = apiKey;
+document.getElementById('popupSystem').value = systemPrompt;
 el.systemPrompt.addEventListener('input', () => {
   systemPrompt = el.systemPrompt.value.trim();
   localStorage.setItem('zer0_system_prompt', systemPrompt);
@@ -360,18 +359,106 @@ function setConnected(on){
   el.dot.className = 'dot ' + (on?'on':'');
   el.statut.textContent = on ? 'CONNECTE' : 'DECONNECTE';
   el.statut.style.color = on ? 'var(--lime)' : 'var(--red)';
-}
-function showInfo(msg){
-  console.log('ZER0 INFO:', msg);
-  el.err.textContent = msg;
-  el.err.style.display = msg ? 'block' : 'none';
-  el.err.style.color = 'var(--lime)';
-  el.err.style.background = '#0a2a0a';
-  el.err.style.borderColor = 'var(--lime)';
+  if(on){ lemmingsShow(); } else { lemmingsHide(); }
 }
 function showErr(msg){
   console.error('ZER0 ERR:', msg || '(vide)');
   el.err.textContent = msg || '';
+  el.err.style.color = 'var(--red)';
+  el.err.style.background = '#2a0a0a';
+  el.err.style.borderColor = 'var(--red)';
+  el.err.style.display = msg ? 'block' : 'none';
+}
+/* ===== LEMMINGS ===== */
+const lemCv = document.getElementById('lemmings');
+const lctx = lemCv.getContext('2d');
+const LEM = { on:false, raf:null, last:0, lastSpawn:0, guys:[] };
+const LEM_GROUND = 27, LEM_HOLE = 148, LEM_SCALE = 2;
+const LEM_BODY = [
+  '..HHH..',
+  '.HHHHH.',
+  '.FFFFF.',
+  '.FEFEF.',
+  '.FFFFF.',
+  '..CCC..',
+  '.CCCCC.',
+];
+const LEM_LEGS_A = ['..L.L..', '..L.L..'];
+const LEM_LEGS_B = ['.L...L.', 'L.....L'];
+const LEM_COLORS = { H:'#00ff00', F:'#ffd9a0', E:'#14141a', C:'#4a7dff', L:'#4a7dff' };
+
+function lemDrawGuy(g, t){
+  const rows = LEM_BODY.concat((Math.floor((t + g.phase)/170) % 2 === 0) ? LEM_LEGS_A : LEM_LEGS_B);
+  const h = rows.length * LEM_SCALE;
+  lctx.save();
+  lctx.translate(Math.round(g.x), Math.round(LEM_GROUND + g.y));
+  if(g.state === 'fall'){
+    lctx.translate(3.5*LEM_SCALE, -h/2);
+    lctx.rotate(g.rot);
+    lctx.translate(-3.5*LEM_SCALE, h/2);
+  }
+  lctx.translate(0, -h);
+  for(let r = 0; r < rows.length; r++){
+    for(let c = 0; c < rows[r].length; c++){
+      const ch = rows[r][c];
+      if(ch === '.') continue;
+      lctx.fillStyle = LEM_COLORS[ch];
+      lctx.fillRect(c*LEM_SCALE, r*LEM_SCALE, LEM_SCALE, LEM_SCALE);
+    }
+  }
+  lctx.restore();
+}
+
+function lemLoop(t){
+  if(!LEM.on) return;
+  const dt = Math.min(t - (LEM.last || t), 120); LEM.last = t;
+  if(t - LEM.lastSpawn > 1500){
+    LEM.guys.push({ x:-18, y:0, phase:Math.random()*999, state:'walk', vy:0, rot:0 });
+    LEM.lastSpawn = t;
+  }
+  for(const g of LEM.guys){
+    if(g.state === 'walk'){
+      g.x += 0.045*dt;
+      if(g.x >= LEM_HOLE){ g.state = 'fall'; g.vy = 0; }
+    } else {
+      g.vy += 0.0012*dt;
+      g.y += g.vy*dt;
+      g.rot += 0.005*dt;
+      if(g.y > 50) g.dead = true;
+    }
+  }
+  LEM.guys = LEM.guys.filter(g => !g.dead);
+  lctx.clearRect(0, 0, lemCv.width, lemCv.height);
+  lctx.fillStyle = '#3a3a4a';
+  lctx.fillRect(0, LEM_GROUND, LEM_HOLE, 2);
+  lctx.fillStyle = '#00ff00';
+  for(let x = 0; x < LEM_HOLE; x += 4) lctx.fillRect(x, LEM_GROUND - 1, 2, 1);
+  lctx.fillStyle = '#000';
+  lctx.fillRect(LEM_HOLE, LEM_GROUND - 2, lemCv.width - LEM_HOLE, 4);
+  LEM.guys.forEach(g => lemDrawGuy(g, t));
+  LEM.raf = requestAnimationFrame(lemLoop);
+}
+
+function lemmingsShow(){
+  if(LEM.on) return;
+  LEM.on = true;
+  lemCv.style.display = 'block';
+  LEM.last = 0; LEM.lastSpawn = 0; LEM.guys = [];
+  LEM.raf = requestAnimationFrame(lemLoop);
+}
+function lemmingsHide(){
+  LEM.on = false;
+  if(LEM.raf) cancelAnimationFrame(LEM.raf);
+  lemCv.style.display = 'none';
+  lctx.clearRect(0, 0, lemCv.width, lemCv.height);
+}
+/* ===== /LEMMINGS ===== */
+
+function showInfo(msg){
+  el.err.textContent = msg || '';
+  el.err.style.color = 'var(--lime)';
+  el.err.style.background = '#0a2a0a';
+  el.err.style.borderColor = 'var(--lime)';
   el.err.style.display = msg ? 'block' : 'none';
 }
 function setLoading(loading){
