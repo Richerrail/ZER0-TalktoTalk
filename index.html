@@ -297,8 +297,8 @@ footer{
       <label>SYSTEM PROMPT</label>
       <textarea id="popupSystem" rows="2" oninput="document.getElementById('systemPrompt').value=this.value; window.systemPrompt=this.value.trim(); localStorage.setItem('zer0_system_prompt', this.value.trim());"></textarea>
     </div>
-    <button class="btn" onclick="loadModels(); document.getElementById('popupOverlay').classList.remove('open')">CONNECTER</button>
-    <button class="btn secondary" onclick="loadModels(); document.getElementById('popupOverlay').classList.remove('open')">MAJ LISTE</button>
+    <button class="btn" onclick="apiKey=document.getElementById('popupApiKey').value.trim(); if(apiKey){ saveKey(); loadModels(); } else { alert('Cle API vide'); } document.getElementById('popupOverlay').classList.remove('open')">CONNECTER</button>
+    <button class="btn secondary" onclick="apiKey=document.getElementById('popupApiKey').value.trim(); if(apiKey) saveKey(); loadModels(); document.getElementById('popupOverlay').classList.remove('open')">MAJ LISTE</button>
     <div class="models" id="popupModels" style="margin-top:10px; max-height:200px;">
       <div style="color:#888;font-size:13px;padding:6px;">liste vide</div>
     </div>
