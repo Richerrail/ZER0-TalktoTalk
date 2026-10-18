@@ -30,3 +30,12 @@ Application web rétro 80's pour discuter uniquement avec le provider **OpenRout
 5. Écrire et envoyer
 Animation Lemming ajoutée via canvas (desktop uniquement) dans index.html.
 Le fichier index.html a disparu du dossier (probablement déplacé/supprimé précédemment). Le README.md, la screenshot (assets/screenshot.png) et le script d animation (animation.py) sont présents dans /home/omar0/ZER0-TalktoTalk/. L animation Lemming est un canvas qui tombe en boucle (intégré pour desktop uniquement via media query ou condition JS). Le bouton MENU ⚡ reste pour mobile.
+
+
+## Soutenez le projet
+
+<p align="center">
+  <a href="https://www.buymeacoffee.com/richerrailk" target="_blank" rel="noopener noreferrer">
+    <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee">
+  </a>
+</p>
