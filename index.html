@@ -30,16 +30,13 @@ html,body{
   overflow:hidden;
   position:relative;
 }
-/* Scanlines 80' discretes */
 body::after{
   content:" ";
   position:fixed; inset:0;
   background:linear-gradient(rgba(18,16,16,0.25) 50%, rgba(0,0,0,0.25) 50%);
   background-size:100% 4px;
-  pointer-events:none;
-  z-index:50;
+  pointer-events:none; z-index:50;
 }
-/* ===== APP GRID ===== */
 .app{
   display:grid;
   grid-template-columns: 300px 1fr;
@@ -50,7 +47,7 @@ body::after{
   max-width:1500px;
   margin:0 auto;
 }
-/* ===== HEADER ASCII LEGO ===== */
+/* ===== HEADER ===== */
 header{
   grid-column:1 / -1;
   background:var(--panel);
@@ -87,19 +84,14 @@ header{
 .dot{
   width:12px;height:12px; border-radius:50%;
   background:var(--red); box-shadow:0 0 10px var(--red);
-  animation:pulse 1.5s infinite;
-  flex-shrink:0;
+  animation:pulse 1.5s infinite; flex-shrink:0;
 }
 .dot.on{ background:var(--lime); box-shadow:0 0 12px var(--lime); animation:none; }
 @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
-.keybad{
-  display:flex; gap:10px; margin-left:auto;
-}
+.keybad{ display:flex; gap:10px; margin-left:auto; }
 .keybad button{
-  font-family:'Press Start 2P', cursive;
-  font-size:12px; padding:6px 12px;
-  background:var(--bg); border:2px solid var(--cyan);
-  color:var(--cyan); cursor:pointer;
+  font-family:'Press Start 2P', cursive; font-size:12px; padding:6px 12px;
+  background:var(--bg); border:2px solid var(--cyan); color:var(--cyan); cursor:pointer;
 }
 .keybad button:hover{ background:var(--cyan); color:#000; }
 /* ===== SIDEBAR ===== */
@@ -112,14 +104,11 @@ aside{
   overflow:hidden;
 }
 aside h2{
-  font-family:'Press Start 2P', cursive;
-  font-size:13px; color:var(--magenta);
+  font-family:'Press Start 2P', cursive; font-size:13px; color:var(--magenta);
   margin:0 0 8px 0; text-transform:uppercase; letter-spacing:1px;
   border-bottom:2px solid var(--magenta); padding-bottom:6px;
 }
-.apikey{
-  display:flex; flex-direction:column; gap:6px;
-}
+.apikey{ display:flex; flex-direction:column; gap:6px; }
 .apikey label{ font-size:14px; color:var(--cyan); }
 .apikey input{
   font-family:'VT323',monospace; font-size:17px;
@@ -127,9 +116,13 @@ aside h2{
   padding:8px; outline:none;
 }
 .apikey input:focus{ border-color:var(--lime); box-shadow:0 0 12px var(--lime); }
+.apikey textarea{
+  font-family:'VT323',monospace; font-size:14px;
+  background:#0a0a10; border:2px solid var(--cyan); color:var(--lime);
+  padding:8px; outline:none; resize:vertical; min-height:44px; max-height:140px;
+}
 .btn{
-  font-family:'Press Start 2P', cursive;
-  font-size:13px; padding:8px 12px;
+  font-family:'Press Start 2P', cursive; font-size:13px; padding:8px 12px;
   background:var(--bg); border:2px solid var(--lime);
   color:var(--lime); cursor:pointer; text-transform:uppercase;
 }
@@ -185,8 +178,7 @@ main{
   align-self:flex-start; font-size:17px; color:var(--lime);
   display:flex; gap:6px; padding:8px 16px;
 }
-.typing span{ width:10px; height:10px; background:var(--lime); border-radius:50%;
-  animation:bounce 1.4s infinite ease-in-out both; }
+.typing span{ width:10px; height:10px; background:var(--lime); border-radius:50%; animation:bounce 1.4s infinite ease-in-out both; }
 .typing span:nth-child(1){ animation-delay:0s; }
 .typing span:nth-child(2){ animation-delay:0.2s; }
 .typing span:nth-child(3){ animation-delay:0.4s; }
@@ -211,59 +203,58 @@ footer{
 }
 #send:hover{ background:var(--lime); color:#000; box-shadow:0 0 16px var(--lime); }
 #send:disabled{ opacity:.5; cursor:not-allowed; border-color:#666; color:#888; }
-/* Empty */
+/* ===== EMPTY ===== */
 .empty{
   margin-top:auto; align-self:center; color:#666; font-size:16px;
   font-family:'Press Start 2P', cursive; text-align:center; opacity:0.8;
 }
-/* Mobile tweak */
-@media (max-width:950px){
-  .app{ grid-template-columns:1fr; grid-template-rows:auto 70px 1fr auto; gap:6px; padding:4px; }
-  header{ padding:10px 12px; gap:8px; }
-  .ascii{ font-size:14px; line-height:1.2; white-space:pre-wrap; word-wrap:break-word; }
+/* ===== POPUP MOBILE ===== */
+.popup-overlay{
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:200;
+  align-items:center; justify-content:center; padding:16px;
+}
+.popup-overlay.open{ display:flex; }
+.popup-box{
+  background:#1e1e2a; border:3px solid var(--cyan);
+  box-shadow:0 0 20px var(--cyan); padding:14px; width:100%; max-width:420px;
+  max-height:90vh; overflow-y:auto; border-radius:8px;
+}
+.popup-box h3{
+  font-family:'Press Start 2P', cursive; font-size:12px; color:var(--cyan);
+  margin:0 0 10px 0; text-align:center; letter-spacing:1px;
+}
+.popup-box .apikey{ margin-bottom:8px; }
+.popup-box button{ width:100%; margin-top:6px; }
+/* ===== MOBILE ===== */
+@media (max-width: 950px) {
+  .app{ grid-template-columns:1fr; grid-template-rows:auto 1fr auto; gap:6px; padding:4px; height:auto; min-height:100vh; }
+  header{ padding:10px 10px; gap:6px; }
+  header .ascii{ font-size:13px; line-height:1.05; white-space:pre-wrap; overflow-wrap:anywhere; word-break:break-word; }
   .subtitle{ font-size:9px; }
   .status{ font-size:13px; gap:8px; }
-  .keybad{ gap:6px; }
   .keybad button{ font-size:10px; padding:4px 8px; }
-  aside{ grid-row:2; border:none; border-bottom:3px solid var(--magenta); border-right:3px solid var(--magenta); flex-direction:row; overflow:auto; padding:10px; gap:8px; }
-  .apikey{ flex:1; min-width:0; }
-  .apikey input{ font-size:14px; padding:6px; }
-  .btn{ font-size:11px; padding:6px 10px; }
-  .models{ flex-direction:row; flex-wrap:wrap; align-items:center; gap:6px; padding:4px; }
-  .model{ min-width:140px; font-size:13px; padding:6px 8px; }
-  main{ grid-row:3; }
+  aside{ display:none; }
+  main{ grid-column:1; }
+  footer{ grid-column:1; }
   #chat{ padding:10px; gap:10px; }
   .msg{ max-width:92%; }
   .bubble{ font-size:16px; padding:10px 14px; }
-  footer{ padding:8px; gap:8px; }
   #input{ font-size:16px; padding:10px 14px; min-height:44px; }
-  #send{ font-size:11px; padding:10px 16px; }
-}
-@media (max-width:480px){
-  .ascii{ font-size:12px; }
-  .models{ flex-direction:column; }
-  .model{ width:100%; min-width:unset; }
-  aside{ flex-direction:column; }
-  .apikey{ width:100%; }
-}
-@media (max-width:380px){
-  .ascii{ font-size:11px; }
-  .msg{ max-width:96%; }
-  .bubble{ font-size:15px; }
+  #send{ font-size:12px; padding:10px 16px; }
+  /* Menu mobile bouton flottant */
+  .mobile-menu-btn{
+    position:fixed; bottom:70px; right:10px; z-index:150;
+    font-family:'Press Start 2P', cursive; font-size:10px;
+    padding:10px 14px; background:var(--magenta); color:#fff; border:2px solid var(--cyan);
+    box-shadow:0 0 14px var(--magenta); cursor:pointer; border-radius:8px;
+  }
 }
 </style>
 </head>
 <body>
 <div class="app">
   <header>
-    <pre style="font-family:'Courier New',Courier,monospace;font-size:12px;line-height:1.17;white-space:pre-wrap;overflow-wrap:anywhere;background-color:#000;color:#fff;padding:8px;margin:0;"><span style="color:#AAAAAA"> ▄▄▄▄▄▄▄      ▄▄▄▄  ▄▄▄▄▄▄</span><span style="color:#555555">▄</span><span style="color:#AAAAAA">        ▄▄▄▄</span><span style="color:#555555">▄</span><span style="color:#AAAAAA">          ▄▄▄▄▄▄▄▄▄     ▄▄▄▄    ▄▄▄       ▄▄▄  ▄▄▄  ▄▄▄▄▄▄▄▄▄      ▄▄▄▄</span><span style="color:#555555">▄</span><span style="color:#AAAAAA">     ▄▄▄▄▄▄▄▄▄     ▄▄▄▄    ▄▄▄       ▄▄▄  ▄▄▄ </span>
-<span style="color:#AAAAAA">█</span><span style="color:#00AA00">██</span><span style="color:#555555;background-color:#00AA00">▄▄</span><span style="color:#AAAAAA;background-color:#00AA00">▄</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">   ▄</span><span style="color:#AAAAAA;background-color:#00AA00">▀</span><span style="color:#00AA00">████</span><span style="color:#555555">█</span><span style="color:#AAAAAA"> █</span><span style="color:#00AA00">██████</span><span style="color:#555555;background-color:#00AA00">▀</span><span style="color:#555555">▄</span><span style="color:#AAAAAA">    ▄</span><span style="color:#AAAAAA;background-color:#00AA00">▀</span><span style="color:#00AA00">█████</span><span style="color:#555555;background-color:#00AA00">▀</span><span style="color:#555555">▄</span><span style="color:#AAAAAA">        █</span><span style="color:#00AA00">████████</span><span style="color:#555555">█</span><span style="color:#AAAAAA">   █</span><span style="color:#00AA00">████</span><span style="color:#555555">█</span><span style="color:#AAAAAA">   █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">      █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA"> █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA"> █</span><span style="color:#00AA00">████████</span><span style="color:#555555">█</span><span style="color:#AAAAAA">   ▄</span><span style="color:#AAAAAA;background-color:#00AA00">▀</span><span style="color:#00AA00">█████</span><span style="color:#555555;background-color:#00AA00">▀</span><span style="color:#555555">▄</span><span style="color:#AAAAAA">   █</span><span style="color:#00AA00">████████</span><span style="color:#555555">█</span><span style="color:#AAAAAA">   █</span><span style="color:#00AA00">████</span><span style="color:#555555">█</span><span style="color:#AAAAAA">   █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">      █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA"> █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span>
-<span style="color:#AAAAAA">█</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA"> █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">  █</span><span style="color:#00AA00">██</span><span style="color:#555555;background-color:#00AA00">▄</span><span style="color:#555555">▀▀▀▀</span><span style="color:#AAAAAA"> █</span><span style="color:#00AA00">██</span><span style="color:#555555">█▀▀</span><span style="color:#AAAAAA;background-color:#00AA00">▄</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">  █</span><span style="color:#00AA00">██</span><span style="color:#555555;background-color:#00AA00">▄</span><span style="color:#555555">▀▀▀</span><span style="color:#AAAAAA;background-color:#00AA00">▄</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">       </span><span style="color:#555555">▀▀</span><span style="color:#AAAAAA">▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">██</span><span style="color:#555555;background-color:#00AA00">▄</span><span style="color:#555555">▀▀▀</span><span style="color:#AAAAAA">  █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">█</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">  █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">      █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA"> █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA"> </span><span style="color:#555555">▀▀</span><span style="color:#AAAAAA">▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">██</span><span style="color:#555555;background-color:#00AA00">▄</span><span style="color:#555555">▀▀▀</span><span style="color:#AAAAAA">  █</span><span style="color:#00AA00">██</span><span style="color:#555555;background-color:#00AA00">▄</span><span style="color:#555555">▀▀▀</span><span style="color:#AAAAAA;background-color:#00AA00">▄</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">  </span><span style="color:#555555">▀▀</span><span style="color:#AAAAAA">▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">██</span><span style="color:#555555;background-color:#00AA00">▄</span><span style="color:#555555">▀▀▀</span><span style="color:#AAAAAA">  █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">█</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">  █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">      █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA"> █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span>
-<span style="color:#555555">▀▀▀</span><span style="color:#555555;background-color:#AAAAAA">▀</span><span style="color:#AAAAAA">▄</span><span style="color:#AAAAAA;background-color:#00AA00">▀</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA"> ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">██</span><span style="color:#AAAAAA;background-color:#00AA00">▀▀▀</span><span style="color:#555555">▄</span><span style="color:#AAAAAA">  █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">▄▄</span><span style="color:#AAAAAA;background-color:#00AA00">▀</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA"> ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">█</span><span style="color:#555555;background-color:#00AA00">▐</span><span style="color:#555555">▌</span><span style="color:#AAAAAA">   ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">█</span><span style="color:#555555;background-color:#00AA00">▐</span><span style="color:#555555">▌</span><span style="color:#AAAAAA">        ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">    ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">█</span><span style="color:#555555">█</span><span style="color:#AAAAAA"> ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">█</span><span style="color:#555555;background-color:#00AA00">▐</span><span style="color:#555555">▌</span><span style="color:#AAAAAA"> █</span><span style="color:#00AA00">██</span><span style="color:#555555">█▌</span><span style="color:#AAAAAA">     █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">▄█</span><span style="color:#00AA00">█</span><span style="color:#555555;background-color:#00AA00">▄</span><span style="color:#555555">▀</span><span style="color:#AAAAAA">   ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">    ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">█</span><span style="color:#555555;background-color:#00AA00">▐</span><span style="color:#555555">▌</span><span style="color:#AAAAAA">   ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">█</span><span style="color:#555555;background-color:#00AA00">▐</span><span style="color:#555555">▌</span><span style="color:#AAAAAA">   ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">    ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">█</span><span style="color:#555555">█</span><span style="color:#AAAAAA"> ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">█</span><span style="color:#555555;background-color:#00AA00">▐</span><span style="color:#555555">▌</span><span style="color:#AAAAAA"> █</span><span style="color:#00AA00">██</span><span style="color:#555555">█▌</span><span style="color:#AAAAAA">     █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">▄█</span><span style="color:#00AA00">█</span><span style="color:#555555;background-color:#00AA00">▄</span><span style="color:#555555">▀</span>
-<span style="color:#AAAAAA">▄</span><span style="color:#AAAAAA;background-color:#00AA00">▀▀</span><span style="color:#00AA00">██</span><span style="color:#555555;background-color:#00AA00">▄</span><span style="color:#555555">▀▀</span><span style="color:#AAAAAA">  ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">██</span><span style="color:#555555;background-color:#00AA00">▄▄▄</span><span style="color:#555555">█</span><span style="color:#AAAAAA">  █</span><span style="color:#00AA00">██████</span><span style="color:#555555;background-color:#00AA00">▄</span><span style="color:#555555">▀</span><span style="color:#AAAAAA">  ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">█</span><span style="color:#555555;background-color:#00AA00">▐</span><span style="color:#555555">▌</span><span style="color:#AAAAAA">   ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">█</span><span style="color:#555555;background-color:#00AA00">▐</span><span style="color:#555555">▌</span><span style="color:#AAAAAA">        ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">    █</span><span style="color:#00AA00">████████</span><span style="color:#555555">█</span><span style="color:#AAAAAA"> ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">█</span><span style="color:#555555;background-color:#00AA00">▐</span><span style="color:#555555">▌</span><span style="color:#AAAAAA">     █</span><span style="color:#00AA00">█████</span><span style="color:#555555;background-color:#00AA00">▀</span><span style="color:#AAAAAA">▄    ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">    ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">█</span><span style="color:#555555;background-color:#00AA00">▐</span><span style="color:#555555">▌</span><span style="color:#AAAAAA">   ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">█</span><span style="color:#555555;background-color:#00AA00">▐</span><span style="color:#555555">▌</span><span style="color:#AAAAAA">   ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">    █</span><span style="color:#00AA00">████████</span><span style="color:#555555">█</span><span style="color:#AAAAAA"> ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">█</span><span style="color:#555555;background-color:#00AA00">▐</span><span style="color:#555555">▌</span><span style="color:#AAAAAA">     █</span><span style="color:#00AA00">█████</span><span style="color:#555555;background-color:#00AA00">▀</span><span style="color:#AAAAAA">▄ </span>
-<span style="color:#AAAAAA">█</span><span style="color:#00AA00">██</span><span style="color:#555555">█▀</span><span style="color:#AAAAAA">▄</span><span style="color:#AAAAAA;background-color:#00AA00">▀▀</span><span style="color:#555555;background-color:#AAAAAA">▄</span><span style="color:#AAAAAA">  █</span><span style="color:#00AA00">██</span><span style="color:#555555;background-color:#00AA00">▀</span><span style="color:#555555">▄</span><span style="color:#AAAAAA">▄▄  █</span><span style="color:#00AA00">██</span><span style="color:#555555;background-color:#00AA00">▄</span><span style="color:#00AA00">██</span><span style="color:#555555;background-color:#00AA00">▀</span><span style="color:#555555">▄</span><span style="color:#AAAAAA">    █</span><span style="color:#00AA00">██</span><span style="color:#555555;background-color:#00AA00">▀</span><span style="color:#555555">▄</span><span style="color:#AAAAAA">▄▄</span><span style="color:#AAAAAA;background-color:#00AA00">▀</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">         ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">    █</span><span style="color:#00AA00">██</span><span style="color:#555555">█▀▀</span><span style="color:#AAAAAA">█</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">  █</span><span style="color:#00AA00">██</span><span style="color:#555555;background-color:#00AA00">▀</span><span style="color:#555555">▄</span><span style="color:#AAAAAA">▄▄  █</span><span style="color:#00AA00">██</span><span style="color:#555555">█▀</span><span style="color:#AAAAAA">█</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">   ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">     █</span><span style="color:#00AA00">██</span><span style="color:#555555;background-color:#00AA00">▀</span><span style="color:#555555">▄</span><span style="color:#AAAAAA">▄▄</span><span style="color:#AAAAAA;background-color:#00AA00">▀</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">    ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">    █</span><span style="color:#00AA00">██</span><span style="color:#555555">█▀▀</span><span style="color:#AAAAAA">█</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">  █</span><span style="color:#00AA00">██</span><span style="color:#555555;background-color:#00AA00">▀</span><span style="color:#555555">▄</span><span style="color:#AAAAAA">▄▄  █</span><span style="color:#00AA00">██</span><span style="color:#555555">█▀</span><span style="color:#AAAAAA">█</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span>
-<span style="color:#AAAAAA">█</span><span style="color:#00AA00">██</span><span style="color:#555555;background-color:#00AA00">▀</span><span style="color:#AAAAAA;background-color:#00AA00">▀▀</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">   ▀</span><span style="color:#AAAAAA;background-color:#00AA00">▄</span><span style="color:#00AA00">████</span><span style="color:#555555">█</span><span style="color:#AAAAAA"> █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">▀</span><span style="color:#AAAAAA;background-color:#00AA00">▄</span><span style="color:#00AA00">██</span><span style="color:#555555;background-color:#00AA00">▀</span><span style="color:#555555">▄</span><span style="color:#AAAAAA">   ▀</span><span style="color:#AAAAAA;background-color:#00AA00">▄</span><span style="color:#00AA00">█████</span><span style="color:#555555;background-color:#00AA00">▄</span><span style="color:#555555">▀</span><span style="color:#AAAAAA">          ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">    █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">  █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">   ▀</span><span style="color:#AAAAAA;background-color:#00AA00">▄</span><span style="color:#00AA00">████</span><span style="color:#555555">█</span><span style="color:#AAAAAA"> █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA"> █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">   ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">      ▀</span><span style="color:#AAAAAA;background-color:#00AA00">▄</span><span style="color:#00AA00">█████</span><span style="color:#555555;background-color:#00AA00">▄</span><span style="color:#555555">▀</span><span style="color:#AAAAAA">     ▐</span><span style="color:#AAAAAA;background-color:#00AA00">▌</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">    █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">  █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA">   ▀</span><span style="color:#AAAAAA;background-color:#00AA00">▄</span><span style="color:#00AA00">████</span><span style="color:#555555">█</span><span style="color:#AAAAAA"> █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span><span style="color:#AAAAAA"> █</span><span style="color:#00AA00">██</span><span style="color:#555555">█</span>
-<span style="color:#AAAAAA"> </span><span style="color:#555555">▀▀▀▀▀▀▀▀</span><span style="color:#AAAAAA">     </span><span style="color:#555555">▀▀▀▀▀</span><span style="color:#AAAAAA"> </span><span style="color:#555555">▀▀▀▀</span><span style="color:#AAAAAA"> </span><span style="color:#555555">▀▀▀▀</span><span style="color:#AAAAAA">     </span><span style="color:#555555">▀▀▀▀▀</span><span style="color:#AAAAAA">             </span><span style="color:#555555">▀▀▀▀</span><span style="color:#AAAAAA">    </span><span style="color:#555555">▀▀▀▀</span><span style="color:#AAAAAA">  </span><span style="color:#555555">▀▀▀▀</span><span style="color:#AAAAAA">     </span><span style="color:#555555">▀▀▀▀▀</span><span style="color:#AAAAAA"> </span><span style="color:#555555">▀▀▀▀</span><span style="color:#AAAAAA"> </span><span style="color:#555555">▀▀▀▀</span><span style="color:#AAAAAA">    </span><span style="color:#555555">▀▀▀▀</span><span style="color:#AAAAAA">        </span><span style="color:#555555">▀▀▀▀▀</span><span style="color:#AAAAAA">        </span><span style="color:#555555">▀▀▀▀</span><span style="color:#AAAAAA">    </span><span style="color:#555555">▀▀▀▀</span><span style="color:#AAAAAA">  </span><span style="color:#555555">▀▀▀▀</span><span style="color:#AAAAAA">     </span><span style="color:#555555">▀▀▀▀▀</span><span style="color:#AAAAAA"> </span><span style="color:#555555">▀▀▀▀</span><span style="color:#AAAAAA"> </span><span style="color:#555555">▀▀▀▀</span></pre>
+    <pre class="ascii">ZER0|TalktoTalk</pre>
     <div class="subtitle">openrouter :: modeles gratuits uniquement :: retro 80'</div>
     <div class="status">
       <div class="dot" id="dot"></div>
@@ -271,6 +262,7 @@ footer{
       <div class="keybad">
         <button id="btnApi" class="btn secondary">CLE API</button>
         <button id="btnRefresh" class="btn">MAJ LISTE</button>
+        <button id="btnPopup" class="btn secondary" onclick="document.getElementById('popupOverlay').classList.add('open')">MENU</button>
       </div>
     </div>
   </header>
@@ -303,6 +295,30 @@ footer{
   </main>
 </div>
 
+<!-- Popup mobile -->
+<div id="popupOverlay" class="popup-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+  <div class="popup-box" onclick="event.stopPropagation()">
+    <h2>CONFIGURATION</h2>
+    <div class="apikey">
+      <label>CLE OPENROUTER</label>
+      <input type="password" id="popupApiKey" placeholder="sk-or-..." autocomplete="off" oninput="document.getElementById('apiKey').value=this.value; window.apiKey=this.value.trim(); saveKey();">
+    </div>
+    <div class="apikey">
+      <label>SYSTEM PROMPT</label>
+      <textarea id="popupSystem" rows="2" oninput="document.getElementById('systemPrompt').value=this.value; window.systemPrompt=this.value.trim(); localStorage.setItem('zer0_system_prompt', this.value.trim());"></textarea>
+    </div>
+    <button class="btn" onclick="loadModels(); document.getElementById('popupOverlay').classList.remove('open')">CONNECTER</button>
+    <button class="btn secondary" onclick="loadModels(); document.getElementById('popupOverlay').classList.remove('open')">MAJ LISTE</button>
+    <div class="models" id="popupModels" style="margin-top:10px; max-height:200px;">
+      <div style="color:#888;font-size:13px;padding:6px;">liste vide</div>
+    </div>
+    <button class="btn" onclick="document.getElementById('popupOverlay').classList.remove('open')">FERMER</button>
+  </div>
+</div>
+
+<!-- Bouton flottant mobile -->
+<button class="mobile-menu-btn" onclick="document.getElementById('popupOverlay').classList.add('open')">MENU ⚡</button>
+
 <script>
 const API_BASE = 'https://openrouter.ai/api/v1';
 
@@ -312,7 +328,9 @@ const el = {
   btnConnect: document.getElementById('btnConnect'),
   btnApi: document.getElementById('btnApi'),
   btnRefresh: document.getElementById('btnRefresh'),
+  btnPopup: document.getElementById('btnPopup'),
   models: document.getElementById('models'),
+  popupOverlay: document.getElementById('popupOverlay'),
   err: document.getElementById('err'),
   dot: document.getElementById('dot'),
   statut: document.getElementById('statut'),
@@ -354,8 +372,7 @@ function setLoading(loading){
     t.className = 'typing';
     t.id = 'typing';
     t.innerHTML = '<span></span><span></span><span></span>';
-    el.chat.appendChild(t);
-    scrollBottom();
+    el.chat.appendChild(t); scrollBottom();
   } else {
     const t = document.getElementById('typing');
     if(t) t.remove();
@@ -363,15 +380,13 @@ function setLoading(loading){
 }
 function scrollBottom(){ el.chat.scrollTop = el.chat.scrollHeight; }
 
-async function loadModels(){
+async function loadModels() {
   if(!apiKey){ showErr('Saisissez une cle API OpenRouter'); return; }
   el.btnRefresh.disabled = true;
   el.btnRefresh.textContent = 'CHARGEMENT...';
   showErr('');
   try{
-    const res = await fetch(`${API_BASE}/models`, {
-      headers: { Authorization: `Bearer ${apiKey}` }
-    });
+    const res = await fetch(`${API_BASE}/models`, { headers: { Authorization: `Bearer ${apiKey}` } });
     if(!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     models = (data.data || []).filter(m => {
@@ -381,7 +396,7 @@ async function loadModels(){
     renderModels();
     setConnected(true);
     showErr(`${models.length} modeles gratuits charges`);
-  }catch(e){
+  } catch(e) {
     setConnected(false);
     showErr('Erreur chargement modeles: ' + e.message);
   } finally {
@@ -392,19 +407,22 @@ async function loadModels(){
 
 function renderModels(){
   el.models.innerHTML = '';
+  document.getElementById('popupModels').innerHTML = '';
   if(models.length === 0){
-    el.models.innerHTML = '<div style="color:#888;font-size:14px;padding:8px;">aucun modele gratuit</div>';
+    const empty = '<div style="color:#888;font-size:13px;padding:8px;">aucun modele gratuit</div>';
+    el.models.innerHTML = empty;
+    document.getElementById('popupModels').innerHTML = empty;
     return;
   }
   models.forEach(m => {
     const div = document.createElement('div');
     div.className = 'model ' + (currentModel === m.id ? 'active' : '');
     div.innerHTML = `<span>${m.id}</span><span class="free">FREE</span>`;
-    div.onclick = () => {
-      currentModel = m.id;
-      renderModels();
-    };
+    div.onclick = () => { currentModel = m.id; renderModels(); };
     el.models.appendChild(div);
+    const pop = div.cloneNode(true);
+    pop.onclick = () => { currentModel = m.id; renderModels(); document.getElementById('popupOverlay').classList.remove('open'); };
+    document.getElementById('popupModels').appendChild(pop);
   });
   if(currentModel && !models.some(m => m.id === currentModel)) currentModel = null;
 }
@@ -412,23 +430,14 @@ function renderModels(){
 function renderMessages(){
   el.chat.innerHTML = '';
   if(messages.length === 0){
-    el.chat.appendChild(Object.assign(document.createElement('div'), {
-      className:'empty', textContent:'Aucune conversation. Ecrivez votre premier message ci-dessous.'
-    }));
+    el.chat.appendChild(Object.assign(document.createElement('div'), { className:'empty', textContent:'Aucune conversation. Ecrivez votre premier message ci-dessous.' }));
     return;
   }
   messages.forEach(m => {
-    const wrap = document.createElement('div');
-    wrap.className = 'msg ' + m.role;
-    const meta = document.createElement('div');
-    meta.className = 'meta';
-    meta.textContent = m.role === 'user' ? 'UTILISATEUR' : 'ZER0';
-    const b = document.createElement('div');
-    b.className = 'bubble';
-    b.textContent = m.content;
-    wrap.appendChild(meta);
-    wrap.appendChild(b);
-    el.chat.appendChild(wrap);
+    const wrap = document.createElement('div'); wrap.className = 'msg ' + m.role;
+    const meta = document.createElement('div'); meta.className = 'meta'; meta.textContent = m.role === 'user' ? 'UTILISATEUR' : 'ZER0';
+    const b = document.createElement('div'); b.className = 'bubble'; b.textContent = m.content;
+    wrap.appendChild(meta); wrap.appendChild(b); el.chat.appendChild(wrap);
   });
   scrollBottom();
 }
@@ -440,65 +449,34 @@ async function send(){
   if(!currentModel){ showErr('Selectionnez un modele'); return; }
   messages.push({ role:'user', content:text });
   el.input.value = '';
-  saveMessages();
-  renderMessages();
-  setLoading(true);
+  saveMessages(); renderMessages(); setLoading(true);
   try{
     const res = await fetch(`${API_BASE}/chat/completions`, {
       method:'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': window.location.origin,
-        'X-Title': 'ZER0 TalktoTalk'
-      },
-      body: JSON.stringify({
-        model: currentModel,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          ...messages.map(m => ({ role:m.role, content:m.content }))
-        ],
-        temperature: 0.7,
-        max_tokens: 1000
-      })
+      headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json', 'HTTP-Referer': window.location.origin, 'X-Title': 'ZER0 TalktoTalk' },
+      body: JSON.stringify({ model: currentModel, messages: [{ role:'system', content: systemPrompt }, ...messages.map(m => ({ role:m.role, content:m.content }))], temperature: 0.7, max_tokens: 1000 })
     });
-    if(!res.ok){
-      const txt = await res.text().catch(()=>'');
-      throw new Error(`HTTP ${res.status} ${txt}`);
-    }
+    if(!res.ok){ const txt = await res.text().catch(()=> ''); throw new Error(`HTTP ${res.status} ${txt}`); }
     const data = await res.json();
     const reply = data.choices && data.choices[0] ? data.choices[0].message.content : '(aucune reponse)';
     messages.push({ role:'assistant', content:reply });
-    saveMessages();
-    renderMessages();
-  }catch(e){
+    saveMessages(); renderMessages();
+  } catch(e){
     showErr('Erreur envoi: ' + e.message);
-  } finally {
-    setLoading(false);
-  }
+  } finally { setLoading(false); }
 }
 
 el.btnConnect.onclick = () => {
   apiKey = el.apiKey.value.trim();
   if(!apiKey){ showErr('Saisissez une cle API'); return; }
-  saveKey();
-  loadModels();
+  saveKey(); loadModels();
 };
 el.btnRefresh.onclick = loadModels;
-el.btnApi.onclick = () => {
-  el.apiKey.type = el.apiKey.type === 'password' ? 'text' : 'password';
-};
+el.btnApi.onclick = () => { el.apiKey.type = el.apiKey.type === 'password' ? 'text' : 'password'; };
 el.send.onclick = send;
-el.input.addEventListener('keydown', e => {
-  if(e.key === 'Enter' && !e.shiftKey){
-    e.preventDefault();
-    send();
-  }
-});
+el.input.addEventListener('keydown', e => { if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); send(); } });
 
-renderModels();
-renderMessages();
-if(apiKey) loadModels();
+renderModels(); renderMessages(); if(apiKey) loadModels();
 </script>
 </body>
 </html>
