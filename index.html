@@ -373,8 +373,7 @@ function scrollBottom(){ el.chat.scrollTop = el.chat.scrollHeight; }
 async function loadModels(){
   console.log('LOAD', apiKey ? 'avec cle' : 'sans cle');
   if(!apiKey){ showErr('Saisissez une cle API OpenRouter'); return; }
-  el.btnRefresh.disabled = true;
-  el.btnRefresh.textContent = 'CHARGEMENT...';
+  if(el.btnRefresh){ el.btnRefresh.disabled = true; el.btnRefresh.textContent = 'CHARGEMENT...'; }
   showErr('');
   try{
     const res = await fetch(`${API_BASE}/models`, { headers: { Authorization: `Bearer ${apiKey}` } });
@@ -391,8 +390,7 @@ async function loadModels(){
     setConnected(false);
     showErr('Erreur chargement modeles: ' + e.message);
   } finally {
-    el.btnRefresh.disabled = false;
-    el.btnRefresh.textContent = 'MAJ LISTE';
+    if(el.btnRefresh){ el.btnRefresh.disabled = false; el.btnRefresh.textContent = 'MAJ LISTE'; }
   }
 }
 
