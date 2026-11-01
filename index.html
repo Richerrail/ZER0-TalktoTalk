@@ -219,6 +219,14 @@ footer{
 #send:hover{ background:var(--lime); color:#000; box-shadow:0 0 16px var(--lime); }
 #send:disabled{ opacity:.5; cursor:not-allowed; border-color:#666; color:#888; }
 
+#clear{
+  font-family:'Press Start 2P', cursive; font-size:13px;
+  padding:12px 14px; background:var(--bg); border:2px solid var(--red);
+  color:var(--red); cursor:pointer;
+}
+#clear:hover{ background:var(--red); color:#000; box-shadow:0 0 16px var(--red); }
+#clear:disabled{ opacity:.5; cursor:not-allowed; }
+
 /* ===== EMPTY ===== */
 .empty{
   margin-top:auto; align-self:center; color:#666; font-size:16px;
@@ -313,7 +321,8 @@ body > button[onclick*="popupOverlay"]{ display:none; }
     </div>
     <footer>
       <textarea id="input" placeholder="ecrire un message..."></textarea>
-      <button id="send">ENVOYER</button>
+<button id="clear" title="Effacer la conversation">🗑</button>
+<button id="send">ENVOYER</button>
     </footer>
   </main>
 </div>
@@ -492,7 +501,7 @@ function showInfo(msg){
 
 function setLoading(loading){
   el.send.disabled = loading;
-  el.input.disabled = loading;
+  el.input.disabled = loading;           document.getElementById('clear').disabled = loading;
   if(loading){
     const t = document.createElement('div');
     t.className = 'typing';
@@ -604,6 +613,14 @@ el.btnConnect.onclick = () => {
 if(el.btnRefresh) el.btnRefresh.onclick = loadModels;
 if(el.btnApi) el.btnApi.onclick = () => { el.apiKey.type = el.apiKey.type === 'password' ? 'text' : 'password'; };
 el.send.onclick = send;
+document.getElementById('clear').onclick = () => {
+  if(messages.length === 0) return;
+  if(!confirm('Effacer toute la conversation ?')) return;
+  messages = [];
+  saveMessages();
+  renderMessages();
+  showErr('');
+};
 el.input.addEventListener('keydown', e => { if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); send(); } });
 
 renderModels(); renderMessages(); if(apiKey) loadModels();
