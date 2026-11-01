@@ -531,4 +531,82 @@ async function loadModels(){
     setConnected(false);
     showErr('Erreur chargement modeles: ' + e.message);
   } finally {
-    if(el.btnRefresh)
+    if(el.btnRefresh){ el.btnRefresh.disabled = false; el.btnRefresh.textContent = 'MAJ LISTE'; }
+  }
+}
+
+function renderModels(){
+  el.models.innerHTML = '';
+  document.getElementById('popupModels').innerHTML = '';
+  if(models.length === 0){
+    const empty = '<div style="color:#888;font-size:13px;padding:8px;">aucun modele gratuit</div>';
+    el.models.innerHTML = empty;
+    document.getElementById('popupModels').innerHTML = empty;
+    return;
+  }
+  models.forEach(m => {
+    const div = document.createElement('div');
+    div.className = 'model ' + (currentModel === m.id ? 'active' : '');
+    div.innerHTML = `<span>${m.id}</span><span class="free">FREE</span>`;
+    div.onclick = () => { currentModel = m.id; renderModels(); };
+    el.models.appendChild(div);
+    const pop = div.cloneNode(true);
+    pop.onclick = () => { currentModel = m.id; renderModels(); document.getElementById('popupOverlay').classList.remove('open'); };
+    document.getElementById('popupModels').appendChild(pop);
+  });
+  if(currentModel && !models.some(m => m.id === currentModel)) currentModel = null;
+}
+
+function renderMessages(){
+  el.chat.innerHTML = '';
+  if(messages.length === 0){
+    el.chat.appendChild(Object.assign(document.createElement('div'), { className:'empty', textContent:'Aucune conversation. Ecrivez votre premier message ci-dessous.' }));
+    return;
+  }
+  messages.forEach(m => {
+    const wrap = document.createElement('div'); wrap.className = 'msg ' + m.role;
+    const meta = document.createElement('div'); meta.className = 'meta'; meta.textContent = m.role === 'user' ? 'UTILISATEUR' : 'ZER0';
+    const b = document.createElement('div'); b.className = 'bubble'; b.textContent = m.content;
+    wrap.appendChild(meta); wrap.appendChild(b); el.chat.appendChild(wrap);
+  });
+  scrollBottom();
+}
+
+async function send(){
+  const text = el.input.value.trim();
+  if(!text){ showErr('Ecrivez un message'); return; }
+  if(!apiKey){ showErr('Cle API manquante'); return; }
+  if(!currentModel){ showErr('Selectionnez un modele'); return; }
+  messages.push({ role:'user', content:text });
+  el.input.value = '';
+  saveMessages(); renderMessages(); setLoading(true);
+  try{
+    const res = await fetch(`${API_BASE}/chat/completions`, {
+      method:'POST',
+      headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json', 'HTTP-Referer': window.location.origin, 'X-Title': 'ZER0 TalktoTalk' },
+      body: JSON.stringify({ model: currentModel, messages: [{ role:'system', content: systemPrompt }, ...messages.map(m => ({ role:m.role, content:m.content }))], temperature: 0.7, max_tokens: 1000 })
+    });
+    if(!res.ok){ const txt = await res.text().catch(()=> ''); throw new Error(`HTTP ${res.status} ${txt}`); }
+    const data = await res.json();
+    const reply = data.choices && data.choices[0] ? data.choices[0].message.content : '(aucune reponse)';
+    messages.push({ role:'assistant', content:reply });
+    saveMessages(); renderMessages();
+  } catch(e){
+    showErr('Erreur envoi: ' + e.message);
+  } finally { setLoading(false); }
+}
+
+el.btnConnect.onclick = () => {
+  apiKey = el.apiKey.value.trim();
+  if(!apiKey){ showErr('Saisissez une cle API'); return; }
+  saveKey(); loadModels();
+};
+if(el.btnRefresh) el.btnRefresh.onclick = loadModels;
+if(el.btnApi) el.btnApi.onclick = () => { el.apiKey.type = el.apiKey.type === 'password' ? 'text' : 'password'; };
+el.send.onclick = send;
+el.input.addEventListener('keydown', e => { if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); send(); } });
+
+renderModels(); renderMessages(); if(apiKey) loadModels();
+</script>
+</body>
+</html>
